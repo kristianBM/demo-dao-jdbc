@@ -3,7 +3,6 @@ package application;
 import model.dao.DaoFactory;
 import model.dao.DepartmentDao;
 import model.entities.Department;
-import model.entities.Department;
 
 public class Program2 {
 
@@ -21,10 +20,16 @@ public class Program2 {
 		System.out.println(" ");
 		
 		System.out.println("=== TEST 2: department update ===");
-		Department updateDepartment = DepartmentDao.findById(1);
-		updateDepartment.setName("Cars");
-		DepartmentDao.update(updateDepartment);
-		System.out.println("Updated! Current department data: " + updateDepartment);
+		Department dep2 = departmentDao.findById(1);
+		dep2.setName("Food");
+		departmentDao.update(dep2);
+		System.out.println("Update completed");
+		
+		System.out.println(" ");
+		
+		System.out.println("=== TEST 3: department findById ===");
+		Department dep = departmentDao.findById(2);
+		System.out.println(dep);
 
 	}
 

@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import db.DB;
@@ -54,7 +55,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 	public void update(Department obj) {
 		PreparedStatement st = null;
 		try {
-			st = conn.prepareStatement("UPDATE department " + "SET Name = ? " + "WHERE Id = ?");
+			st = conn.prepareStatement("UPDATE department " + "SET Name = ? " + "WHERE Id = ? ");
 
 			st.setString(1, obj.getName());
 			st.setInt(2, obj.getId());
@@ -89,14 +90,14 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 		PreparedStatement st = null;
 		ResultSet rs = null;
 		try {
-			st = conn.prepareStatement("SELECT * FROM department " + "WHERE department.Id = ? ");
+			st = conn.prepareStatement("SELECT * FROM department " + "WHERE Id = ? ");
 
 			st.setInt(1, id);
 			rs = st.executeQuery();
 			if (rs.next()) {
 				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
+				dep.setId(rs.getInt("Id"));
+				dep.setName(rs.getString("Name"));
 				return dep;
 
 			}
@@ -114,8 +115,28 @@ public class DepartmentDaoJDBC implements DepartmentDao {
 
 	@Override
 	public List<Department> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement st = null;
+		ResultSet rs = null;
+		try {
+			st = conn.prepareStatement(
+					  "SELECT * FROM department "
+					+ "ORDER BY Id ");
+			rs = st.executeQuery();
+			
+			List <Department> list = new ArrayList<>();
+			
+			while (rs.next()) {
+				Department obj = new Department();
+				obj.setId(rs.getInt("Id"));
+				obj.setName(rs.getString("Name"));
+				list.add(obj);
+			}
+			return list;
+		}
+		catch (SQLException e) {
+			throw new DbException(e.getMessage());
+		}
+		
 	}
 
 }
